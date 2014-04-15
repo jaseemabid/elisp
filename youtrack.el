@@ -48,28 +48,27 @@ Ex: https://bug.idvc.es")
   "The buffer contains the raw HTTP response sent by the server."
   (switch-to-buffer (current-buffer))) ; use kill-buffer if you don't want to see response
 
+(defun login (baseurl user password)
+  "authenticates with youtrack"
+  (let
+      ((url-path "/rest/user/login"))
+    (http-post (format "%s%s" baseurl url-path)
+               (list `("login" . ,user) `("password" . ,password)))))
+
 (defun yt-bug (project summary &optional description)
   "creates a youtrack issue"
 
   (interactive "sProj. Shortname: \nsSummary: \nsDesc: ")
-
-  (defun login (baseurl user password)
-    "authenticates with youtrack"
-    (let
-	((url-path "/rest/user/login"))
-      (http-post (format "%s%s" baseurl url-path)
-		 (list `("login" . ,user) `("password" . ,password)))))
 
   (if (eq description nil)
       (setq description ""))
 
   (let
       ((url-path "/rest/issue"))
-
     (login yt-baseurl yt-user yt-password)
     (http-put (concat yt-baseurl url-path)
 		      (list `("project" . ,project) ; shortname of the project
-			    `("summary" . ,summary)
-			    `("description" . ,description)))))
+                    `("summary" . ,summary)
+                    `("description" . ,description)))))
 
 (provide 'youtrack)
