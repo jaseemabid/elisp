@@ -10,6 +10,9 @@
   "Base url for youtrack.
 Ex: https://bug.idvc.es")
 
+(defvar yt-project ""
+  "Default project shortname")
+
 (defun http-post (url args)
   "Send ARGS to URL as a POST request."
 
