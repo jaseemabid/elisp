@@ -1,9 +1,3 @@
-;; please have the following variables setup:
-;; (setq yt-user "username")
-;; (setq yt-password "password")
-;; (setq yt-baseurl "http://youtrack-server:port")
-;; then just call yt-bug to report a bug
-
 (require 'url)
 
 (defvar yt-user ""
