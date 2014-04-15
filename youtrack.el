@@ -6,6 +6,16 @@
 
 (require 'url)
 
+(defvar yt-user ""
+  "Login user for youtrack.")
+
+(defvar yt-password ""
+  "Password for the youtrack user.")
+
+(defvar yt-baseurl ""
+  "Base url for youtrack.
+Ex: https://bug.idvc.es")
+
 (defun http-post (url args)
   "Send ARGS to URL as a POST request."
 
