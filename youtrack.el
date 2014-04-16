@@ -14,6 +14,8 @@ Ex: https://bug.idvc.es")
 (defvar yt-project ""
   "Default project shortname")
 
+(defvar yt-buffer "*youtrack*"
+  "Name of the buffer to show the list of issues")
 
 ;; Helper methods to work on issues
 (defun get-id (issue)
