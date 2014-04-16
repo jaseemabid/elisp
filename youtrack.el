@@ -115,4 +115,23 @@ Clips the issue description at 80 chars "
                     `("summary" . ,summary)
                     `("description" . ,description)))))
 
+(defun yt-issues-show (&optional project)
+  "Lists youtrack issues for project
+
+The issues are read from a issues.json and parsed to pretty print
+the issues is a dedicated buffer"
+  (interactive)
+  (let ((json-object-type 'hash-table))
+    (setq issues (json-read-file "./issues.json") )
+    )
+
+  (switch-to-buffer (get-buffer-create yt-buffer))
+  (erase-buffer)
+
+  (let ((i 0))
+    (while (< i (length issues))
+      (setq issue (elt issues i))
+      (insert (issue-format issue))
+      (incf i))))
+
 (provide 'youtrack)
