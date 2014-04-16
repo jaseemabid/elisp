@@ -17,6 +17,13 @@ Ex: https://bug.idvc.es")
 (defvar yt-buffer "*youtrack*"
   "Name of the buffer to show the list of issues")
 
+;; String helpers
+(defun s-pad-right (len padding s)
+  "If S is shorter than LEN, pad it with PADDING on the right."
+  (let ((extra (max 0 (- len (length s)))))
+    (concat s
+            (make-string extra (string-to-char padding)))))
+
 ;; Helper methods to work on issues
 (defun get-id (issue)
   "Return ID or nil given an issue"
@@ -43,8 +50,8 @@ Ex: https://bug.idvc.es")
 (defun issue-format (issue)
   "Format given issue for list display
 
-Pads the issue to 3 chars
-Clips the issue description at 80 chars "
+Pads the issue to 8 chars
+Clips the issue description at `desc-maxlen` chars "
   (let ((id (get-id issue))
         (desc-maxlen 74)
         (desc (get-desc issue)))
@@ -54,8 +61,10 @@ Clips the issue description at 80 chars "
       (if multi
           (setq desc-maxlen (- multi 1))))
 
-    (setq desc (substring desc 0 (min desc-maxlen (length desc))))
-    (concat id "  \u00B7  " desc "\n")))
+    (setq desc (substring desc 0 (min desc-maxlen (length desc)))
+          id (s-pad-right 8 " " id))
+
+    (concat id desc "\n")))
 
 (defun http-post (url args)
   "Send ARGS to URL as a POST request."
