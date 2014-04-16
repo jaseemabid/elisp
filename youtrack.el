@@ -1,4 +1,5 @@
 (require 'url)
+(require 'json)
 
 (defvar yt-user ""
   "Login user for youtrack.")
@@ -12,6 +13,30 @@ Ex: https://bug.idvc.es")
 
 (defvar yt-project ""
   "Default project shortname")
+
+
+;; Helper methods to work on issues
+(defun get-id (issue)
+  "Return ID or nil given an issue"
+  (let ((id nil))
+    (maphash (lambda (k v)
+               (progn
+                 (if (string= k "id")
+                     (setq id v)))
+               ) issue)
+    id))
+
+(defun get-desc  (issue)
+  "Return description or nil given an issue"
+  (let ((desc nil)
+        (i 0)
+        (field (gethash "field" issue)))
+    (while (< i (length field))
+      (let ((prop (elt field i)))
+        (if (string= "description" (gethash "name" prop))
+            (setq desc (gethash "value" prop))))
+      (incf i))
+    desc))
 
 (defun http-post (url args)
   "Send ARGS to URL as a POST request."
