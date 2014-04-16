@@ -46,7 +46,13 @@ Ex: https://bug.idvc.es")
 Pads the issue to 3 chars
 Clips the issue description at 80 chars "
   (let ((id (get-id issue))
+        (desc-maxlen 74)
         (desc (get-desc issue)))
+
+    ;; If description spans multiple lines, show only till first \n
+    (let ((multi (search "\n" desc)))
+      (if multi
+          (setq desc-maxlen multi)))
 
     (setq desc (substring desc 0 (min 74 (length desc))))
     (concat id   "  \u00B7  " desc "\n")))
