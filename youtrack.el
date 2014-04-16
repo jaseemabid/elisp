@@ -68,18 +68,14 @@ Clips the issue description at `desc-maxlen` chars "
 
 (defun http-post (url args)
   "Send ARGS to URL as a POST request."
-
   (let ((url-request-method "POST")
-	(url-request-extra-headers
-	 '(("Content-Type" . "application/x-www-form-urlencoded")))
-	(url-request-data
-	 (mapconcat (lambda (arg)
-		      (concat (url-hexify-string (car arg))
-			      "="
-			      (url-hexify-string (cdr arg))))
-		    args
-                        "&")))
-
+        (url-request-extra-headers
+         '(("Content-Type" . "application/x-www-form-urlencoded")))
+        (url-request-data (mapconcat (lambda (arg)
+                                       (concat (url-hexify-string (car arg))
+                                               "="
+                                               (url-hexify-string (cdr arg))))
+                                     args "&")))
     (url-retrieve url 'dump-url-buffer)))
 
 (defun http-put (url args)
