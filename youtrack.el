@@ -52,10 +52,10 @@ Clips the issue description at 80 chars "
     ;; If description spans multiple lines, show only till first \n
     (let ((multi (search "\n" desc)))
       (if multi
-          (setq desc-maxlen multi)))
+          (setq desc-maxlen (- multi 1))))
 
-    (setq desc (substring desc 0 (min 74 (length desc))))
-    (concat id   "  \u00B7  " desc "\n")))
+    (setq desc (substring desc 0 (min desc-maxlen (length desc))))
+    (concat id "  \u00B7  " desc "\n")))
 
 (defun http-post (url args)
   "Send ARGS to URL as a POST request."
