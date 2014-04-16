@@ -29,8 +29,8 @@ Ex: https://bug.idvc.es")
     id))
 
 (defun get-desc  (issue)
-  "Return description or nil given an issue"
-  (let ((desc nil)
+  "Return description or empty string given an issue"
+  (let ((desc "")
         (i 0)
         (field (gethash "field" issue)))
     (while (< i (length field))
