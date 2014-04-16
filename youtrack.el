@@ -40,6 +40,17 @@ Ex: https://bug.idvc.es")
       (incf i))
     desc))
 
+(defun issue-format (issue)
+  "Format given issue for list display
+
+Pads the issue to 3 chars
+Clips the issue description at 80 chars "
+  (let ((id (get-id issue))
+        (desc (get-desc issue)))
+
+    (setq desc (substring desc 0 (min 74 (length desc))))
+    (concat id   "  \u00B7  " desc "\n")))
+
 (defun http-post (url args)
   "Send ARGS to URL as a POST request."
 
