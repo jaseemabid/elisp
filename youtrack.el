@@ -97,8 +97,8 @@ Clips the issue description at `desc-maxlen` chars "
   "The buffer contains the raw HTTP response sent by the server."
   (switch-to-buffer (current-buffer))) ; use kill-buffer if you don't want to see response
 
-(defun login (baseurl user password)
-  "authenticates with youtrack"
+(defun yt-login (baseurl user password)
+  "Authenticates 'yt-user' with youtrack at 'yt-url'."
   (let
       ((url-path "/rest/user/login"))
     (http-post (format "%s%s" baseurl url-path)
@@ -114,7 +114,7 @@ Clips the issue description at `desc-maxlen` chars "
 
   (let
       ((url-path "/rest/issue"))
-    (login yt-baseurl yt-user yt-password)
+    (yt-login yt-baseurl yt-user yt-password)
     (http-put (concat yt-baseurl url-path)
 		      (list `("project" . ,project) ; shortname of the project
                     `("summary" . ,summary)
