@@ -1,3 +1,5 @@
+;;; youtrack.el --- Youtrack mode for emacs
+
 (require 'url)
 (require 'json)
 
@@ -12,10 +14,10 @@
 Ex: https://bug.idvc.es")
 
 (defvar yt-project ""
-  "Default project shortname")
+  "Default project shortname.")
 
 (defvar yt-buffer "*youtrack*"
-  "Name of the buffer to show the list of issues")
+  "Name of the buffer to show the list of issues.")
 
 ;; String helpers
 (defun s-pad-right (len padding s)
@@ -26,7 +28,7 @@ Ex: https://bug.idvc.es")
 
 ;; Helper methods to work on issues
 (defun get-id (issue)
-  "Return ID or nil given an issue"
+  "Return ID or nil given an ISSUE."
   (let ((id nil))
     (maphash (lambda (k v)
                (progn
@@ -36,7 +38,7 @@ Ex: https://bug.idvc.es")
     id))
 
 (defun get-desc  (issue)
-  "Return description or empty string given an issue"
+  "Return description or empty string given an ISSUE."
   (let ((desc "")
         (i 0)
         (field (gethash "field" issue)))
@@ -48,10 +50,11 @@ Ex: https://bug.idvc.es")
     desc))
 
 (defun issue-format (issue)
-  "Format given issue for list display
+  "Format given ISSUE for list display.
 
-Pads the issue to 8 chars
-Clips the issue description at `desc-maxlen` chars "
+Current formatting include:
+- Pads the issue to 8 chars
+- Clips the issue description at 'desc-maxlen' chars"
   (let ((id (get-id issue))
         (desc-maxlen 74)
         (desc (get-desc issue)))
@@ -67,7 +70,7 @@ Clips the issue description at `desc-maxlen` chars "
     (concat id desc "\n")))
 
 (defun http-post (url args)
-  "Send ARGS to URL as a POST request."
+  "Send POST request to URL with arguments ARGS."
   (let ((url-request-method "POST")
         (url-request-extra-headers
          '(("Content-Type" . "application/x-www-form-urlencoded")))
@@ -79,8 +82,7 @@ Clips the issue description at `desc-maxlen` chars "
     (url-retrieve url 'dump-url-buffer)))
 
 (defun http-put (url args)
-  "Send ARGS to URL as a PUT request."
-
+  "Send PUT request to URL with arguments ARGS."
   (setq args (mapconcat (lambda (arg)
 	       (concat (url-hexify-string (car arg))
 		       "="
@@ -94,18 +96,24 @@ Clips the issue description at `desc-maxlen` chars "
     (url-retrieve (concat url "?" args) 'dump-url-buffer)))
 
 (defun dump-url-buffer (status)
-  "The buffer contains the raw HTTP response sent by the server."
-  (switch-to-buffer (current-buffer))) ; use kill-buffer if you don't want to see response
+  "The buffer contain the raw HTTP response sent by the server.
 
-(defun yt-login (baseurl user password)
-  "Authenticates 'yt-user' with youtrack at 'yt-url'."
+[todo] - STATUS is ignored?"
+  ;; use kill-buffer if you don't want to see response
+  (switch-to-buffer (current-buffer)))
+
+(defun yt-login (user password baseurl)
+  "Authenticates USER with PASSWORD at BASEURL."
   (let
       ((url-path "/rest/user/login"))
     (http-post (format "%s%s" baseurl url-path)
                (list `("login" . ,user) `("password" . ,password)))))
 
 (defun yt-bug (project summary &optional description)
-  "creates a youtrack issue"
+  "Create a youtrack issue.
+Argument PROJECT Shortname of the project at YouTrack.
+Argument SUMMARY Issue summary.
+Optional argument DESCRIPTION Issue description."
 
   (interactive "sProj. Shortname: \nsSummary: \nsDesc: ")
 
@@ -121,7 +129,7 @@ Clips the issue description at `desc-maxlen` chars "
                     `("description" . ,description)))))
 
 (defun yt-issues-show (&optional project)
-  "Lists youtrack issues for project
+  "List youtrack issues for PROJECT.
 
 The issues are read from a issues.json and parsed to pretty print
 the issues is a dedicated buffer"
@@ -140,3 +148,4 @@ the issues is a dedicated buffer"
       (incf i))))
 
 (provide 'youtrack)
+;;; youtrack.el ends here
