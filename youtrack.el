@@ -4,6 +4,22 @@
 (require 'json)
 (require 's)
 
+;;; Settings
+;;;; Custom Groups
+
+(defgroup youtrack nil
+  "Controlling YouTrack from Emacs."
+  :group 'tools)
+
+(defcustom yt-buffer-switch-function 'pop-to-buffer
+  "Function for `yt-issues-list' to use for switching to the list buffer.
+
+The function is given one argument, the status buffer."
+  :group 'youtrack
+  :type '(radio (function-item switch-to-buffer)
+                (function-item pop-to-buffer)
+                (function :tag "Other")))
+
 (defvar yt-user ""
   "Login user for youtrack.")
 
@@ -122,17 +138,17 @@ Optional argument DESCRIPTION Issue description."
                     `("summary" . ,summary)
                     `("description" . ,description)))))
 
-(defun yt-issues-show (&optional project)
+(defun yt-issues-list (&optional project)
   "List youtrack issues for PROJECT.
 
 The issues are read from a issues.json and parsed to pretty print
 the issues is a dedicated buffer"
   (interactive)
   (let ((json-object-type 'hash-table))
-    (setq issues (json-read-file "./issues.json") )
-    )
+    (setq issues (json-read-file "./issues.json")))
 
-  (switch-to-buffer (get-buffer-create yt-buffer))
+  (let ((buffer-switch-function yt-buffer-switch-function))
+    (funcall buffer-switch-function (get-buffer-create yt-buffer)))
   (erase-buffer)
 
   (let ((i 0))

@@ -13,6 +13,10 @@
 (setq yt-baseurl "https://bug.idvc.es")
 ```
 
+## Configuration
+
+M-x customize-group RET and select youtrack
+
 ## Usage examples
 
 1. Create youtrack bugs
