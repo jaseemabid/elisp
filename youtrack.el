@@ -11,6 +11,32 @@
   "Controlling YouTrack from Emacs."
   :group 'tools)
 
+(defcustom yt-user ""
+  "Login user for youtrack."
+  :group 'youtrack
+  :type 'string)
+
+(defcustom yt-password ""
+  "Password for the youtrack user."
+  :group 'youtrack
+  :type 'string)
+
+(defcustom yt-baseurl ""
+  "Base url for youtrack.
+Ex: https://bug.idvc.es"
+  :group 'youtrack
+  :type 'string)
+
+(defcustom yt-project ""
+  "Default project shortname."
+  :group 'youtrack
+  :type 'string))
+
+(defcustom yt-buffer "*youtrack*"
+  "Name of the buffer to show the list of issues."
+  :group 'youtrack
+  :type 'string)
+
 (defcustom yt-buffer-switch-function 'pop-to-buffer
   "Function for `yt-issues-list' to use for switching to the list buffer.
 
@@ -19,22 +45,6 @@ The function is given one argument, the status buffer."
   :type '(radio (function-item switch-to-buffer)
                 (function-item pop-to-buffer)
                 (function :tag "Other")))
-
-(defvar yt-user ""
-  "Login user for youtrack.")
-
-(defvar yt-password ""
-  "Password for the youtrack user.")
-
-(defvar yt-baseurl ""
-  "Base url for youtrack.
-Ex: https://bug.idvc.es")
-
-(defvar yt-project ""
-  "Default project shortname.")
-
-(defvar yt-buffer "*youtrack*"
-  "Name of the buffer to show the list of issues.")
 
 ;; Helper methods to work on issues
 (defun get-id (issue)
