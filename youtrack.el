@@ -2,6 +2,7 @@
 
 (require 'url)
 (require 'json)
+(require 's)
 
 (defvar yt-user ""
   "Login user for youtrack.")
@@ -18,13 +19,6 @@ Ex: https://bug.idvc.es")
 
 (defvar yt-buffer "*youtrack*"
   "Name of the buffer to show the list of issues.")
-
-;; String helpers
-(defun s-pad-right (len padding s)
-  "If S is shorter than LEN, pad it with PADDING on the right."
-  (let ((extra (max 0 (- len (length s)))))
-    (concat s
-            (make-string extra (string-to-char padding)))))
 
 ;; Helper methods to work on issues
 (defun get-id (issue)
