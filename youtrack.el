@@ -38,6 +38,15 @@ Ex: https://bug.idvc.es"
   :group 'youtrack
   :type 'string)
 
+;; Appearance settings
+(defface yt-id
+  '((((class color) (background light))
+     :foreground "firebrick")
+    (((class color) (background dark))
+     :foreground "tomato"))
+  "Face for the ID element of the issues list output."
+  :group 'youtrack)
+
 (defcustom yt-buffer-switch-function 'pop-to-buffer
   "Function for `yt-issues-list' to use for switching to the list buffer.
 
@@ -88,7 +97,9 @@ Current formatting include:
     (setq desc (substring desc 0 (min desc-maxlen (length desc)))
           id (s-pad-right 8 " " id))
 
-    (concat id desc "\n")))
+    (concat
+     (propertize id 'font-lock-face 'yt-id)
+     desc "\n")))
 
 (defun http-post (url args)
   "Send POST request to URL with arguments ARGS."
@@ -159,7 +170,8 @@ the issues is a dedicated buffer"
     (setq issues (json-read-file "./issues.json")))
 
   (let ((buffer-switch-function yt-buffer-switch-function))
-    (funcall buffer-switch-function (get-buffer-create yt-buffer)))
+    (funcall buffer-switch-function (get-buffer-create yt-buffer))
+    (font-lock-mode t))
   (erase-buffer)
 
   (let ((i 0))
