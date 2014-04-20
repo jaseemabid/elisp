@@ -79,27 +79,39 @@ The function is given one argument, the status buffer."
       (cl-incf i))
     desc))
 
+(defun get-summary (issue)
+  "Return summary or empty string given an ISSUE."
+  (let ((summary "")
+        (i 0)
+        (field (gethash "field" issue)))
+    (while (< i (length field))
+      (let ((prop (elt field i)))
+        (if (string= "summary" (gethash "name" prop))
+            (setq summary (gethash "value" prop))))
+      (cl-incf i))
+    summary))
+
 (defun issue-format (issue)
   "Format given ISSUE for list display.
 
 Current formatting include:
 - Pads the issue to 8 chars
-- Clips the issue description at 'desc-maxlen' chars"
+- Clips the issue summary at 'summary-maxlen' chars"
   (let ((id (get-id issue))
-        (desc-maxlen 74)
-        (desc (get-desc issue)))
+        (summary-maxlen 74)
+        (summary (get-summary issue)))
 
-    ;; If description spans multiple lines, show only till first \n
-    (let ((multi (cl-search "\n" desc)))
+    ;; If summary spans multiple lines, show only till first \n
+    (let ((multi (cl-search "\n" summary)))
       (if multi
-          (setq desc-maxlen (- multi 1))))
+          (setq summary-maxlen (- multi 1))))
 
-    (setq desc (substring desc 0 (min desc-maxlen (length desc)))
+    (setq summary (substring summary 0 (min summary-maxlen (length summary)))
           id (s-pad-right 8 " " id))
 
     (concat
      (propertize id 'font-lock-face 'yt-id)
-     desc "\n")))
+     summary "\n")))
 
 (defun http-post (url args)
   "Send POST request to URL with arguments ARGS."
