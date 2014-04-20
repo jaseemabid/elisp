@@ -192,8 +192,16 @@ the issues is a dedicated buffer"
     (setq issues (json-read-file "./issues.json")))
   (apply 'concat (mapcar 'issue-format issues)))
 
+
+(defun yt-status ()
+  "Init screen for youtrack-mode
+
+Aliased to issues list till something better comes along"
+  (interactive)
+  (yt-setup-buffer 'yt-issues-list))
+
 ;; Key bindings and aliases
-(define-key global-map (kbd "C-c y") 'yt-issues-list)
+(define-key global-map (kbd "C-c y") 'yt-status)
 
 (provide 'youtrack)
 ;;; youtrack.el ends here
