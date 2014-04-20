@@ -3,6 +3,7 @@
 (require 'url)
 (require 'json)
 (require 's)
+(require 'cl-lib)
 
 ;;; Settings
 ;;;; Custom Groups
@@ -66,7 +67,7 @@ The function is given one argument, the status buffer."
       (let ((prop (elt field i)))
         (if (string= "description" (gethash "name" prop))
             (setq desc (gethash "value" prop))))
-      (incf i))
+      (cl-incf i))
     desc))
 
 (defun issue-format (issue)
@@ -80,7 +81,7 @@ Current formatting include:
         (desc (get-desc issue)))
 
     ;; If description spans multiple lines, show only till first \n
-    (let ((multi (search "\n" desc)))
+    (let ((multi (cl-search "\n" desc)))
       (if multi
           (setq desc-maxlen (- multi 1))))
 
@@ -165,7 +166,7 @@ the issues is a dedicated buffer"
     (while (< i (length issues))
       (setq issue (elt issues i))
       (insert (issue-format issue))
-      (incf i))))
+      (cl-incf i))))
 
 (provide 'youtrack)
 ;;; youtrack.el ends here
