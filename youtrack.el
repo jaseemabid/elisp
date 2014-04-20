@@ -30,7 +30,7 @@ Ex: https://bug.idvc.es"
 (defcustom yt-project ""
   "Default project shortname."
   :group 'youtrack
-  :type 'string))
+  :type 'string)
 
 (defcustom yt-buffer "*youtrack*"
   "Name of the buffer to show the list of issues."
