@@ -160,25 +160,28 @@ Optional argument DESCRIPTION Issue description."
                     `("summary" . ,summary)
                     `("description" . ,description)))))
 
+(defun yt-setup-buffer (action)
+  "Setup buffer to show contents of ACTION."
+
+  (let ((buffer-switch-function yt-buffer-switch-function))
+    (funcall buffer-switch-function (get-buffer-create yt-buffer))
+    (font-lock-mode t))
+
+  (erase-buffer)
+  (insert (funcall action)))
+
 (defun yt-issues-list (&optional project)
   "List youtrack issues for PROJECT.
 
 The issues are read from a issues.json and parsed to pretty print
 the issues is a dedicated buffer"
-  (interactive)
   (let ((json-object-type 'hash-table))
+    ;; [todo] - Handle errors raised by JSON decoder
     (setq issues (json-read-file "./issues.json")))
+  (apply 'concat (mapcar 'issue-format issues)))
 
-  (let ((buffer-switch-function yt-buffer-switch-function))
-    (funcall buffer-switch-function (get-buffer-create yt-buffer))
-    (font-lock-mode t))
-  (erase-buffer)
-
-  (let ((i 0))
-    (while (< i (length issues))
-      (setq issue (elt issues i))
-      (insert (issue-format issue))
-      (cl-incf i))))
+;; Key bindings and aliases
+(define-key global-map (kbd "C-c y") 'yt-issues-list)
 
 (provide 'youtrack)
 ;;; youtrack.el ends here
