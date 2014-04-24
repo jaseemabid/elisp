@@ -161,6 +161,8 @@ Current formatting include:
   "Downloads issues list from youtrack and save to `yt-issue-db`."
   (let ((url-path "/rest/issue/byproject/")
         (url-params "?max=1000"))
+    ;; Login once, this looks like the place for that
+    (yt-login yt-baseurl yt-user yt-password)
     (let ((issues-url (concat yt-baseurl url-path yt-project url-params)))
       (switch-to-buffer (http-get issues-url))
       ;; Clear header info, why is it even there?
