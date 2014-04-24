@@ -38,6 +38,11 @@ Ex: https://bug.idvc.es"
   :group 'youtrack
   :type 'string)
 
+(defcustom yt-issue-db "~/.emacs.d/youtrack/issues.json"
+  "Default project JSON DB path."
+  :group 'youtrack
+  :type 'file)
+
 ;; Appearance settings
 (defface yt-id
   '((((class color) (background light))
@@ -138,6 +143,20 @@ Current formatting include:
   (let ((url-request-method "PUT")
 	(url-request-extra-headers '(("Content-Length" . "0"))))
     (url-retrieve (concat url "?" args) 'dump-url-buffer)))
+
+(defun http-get (url &optional args)
+  "Send GET request to URL with arguments ARGS."
+  (let ((url-request-method "GET")
+        (url-request-extra-headers
+         '(("Accept" . "application/json"))))
+    (url-retrieve-synchronously url)))
+
+(defun yt-fetch-issues ()
+  (let ((issues (http-get "https://bug.idvc.es/rest/issue/byproject/c" )))
+    (switch-to-buffer issues)
+    ;; Clear header info, why is it even there?
+    (delete-region (point-min) url-http-end-of-headers )
+    (write-file  yt-issue-db)))
 
 (defun dump-url-buffer (status)
   "The buffer contain the raw HTTP response sent by the server.
