@@ -183,22 +183,16 @@ Current formatting include:
     (http-post (format "%s%s" baseurl url-path)
                (list `("login" . ,user) `("password" . ,password)))))
 
-(defun yt-bug (project summary &optional description)
+(defun yt-bug (project summary description)
   "Create a youtrack issue.
 Argument PROJECT Shortname of the project at YouTrack.
 Argument SUMMARY Issue summary.
 Optional argument DESCRIPTION Issue description."
-
   (interactive "sProj. Shortname: \nsSummary: \nsDesc: ")
 
-  (if (eq description nil)
-      (setq description ""))
-
-  (let
-      ((url-path "/rest/issue"))
-    (yt-login yt-baseurl yt-user yt-password)
+  (let ((url-path "/rest/issue"))
     (http-put (concat yt-baseurl url-path)
-		      (list `("project" . ,project) ; shortname of the project
+		      (list `("project" . ,yt-project)
                     `("summary" . ,summary)
                     `("description" . ,description)))))
 
