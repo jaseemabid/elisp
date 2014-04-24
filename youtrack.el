@@ -221,6 +221,10 @@ the issues is a dedicated buffer"
 
 Aliased to issues list till something better comes along"
   (interactive)
+  ;; fetch issues if the local DB is not present
+  (unless (file-readable-p yt-issue-db)
+    (yt-fetch-issues))
+
   (yt-setup-buffer 'yt-issues-list))
 
 ;; Key bindings and aliases
