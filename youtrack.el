@@ -1,5 +1,11 @@
 ;;; youtrack.el --- Youtrack mode for emacs
 
+;; Author: Jaseem <j@ideadevice.com>, Satish Srinivasan <satish@ideadevice.com>
+;; Keywords: youtrack, bug db, issue tracker
+
+;;; Install:
+
+;; Refer to README
 
 ;;; Commentary:
 ;; Youtrack mode to work with Youtrack bug tracker from within Emacs

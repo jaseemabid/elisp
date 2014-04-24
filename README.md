@@ -1,16 +1,25 @@
 # YouTrack mode for Emacs
 
-## Getting started
+## Installation
 
-1. Add `youtrack.el` to emacs load path or, `~/.emacs.d/youtrack/youtrack.el`
-2. Add this code to init.el
+Put this file on your Emacs-Lisp load path, add following into your $HOME/.emacs
+startup file.
 
 ```elisp
-(add-to-list 'load-path "~/.emacs.d/youtrack")
-(require 'youtrack)
-(setq yt-user "you@ideadevice.com")
-(setq yt-password "yourpassword")
-(setq yt-baseurl "https://bug.idvc.es")
+     (add-to-list 'load-path "~/.emacs.d/youtrack")
+     (require 'youtrack)
+```
+
+Youtrack authentication variables can be set by customizing the group `youtrack
+or by setting them directly.
+
+My configuration looks something like this:
+
+```elisp
+     (setq yt-baseurl "https://bug.idvc.es/"
+           yt-password "yourpassword"
+           yt-project "youtrack"
+           yt-user "j")
 ```
 
 ## Configuration
@@ -19,6 +28,4 @@ M-x customize-group RET and select youtrack
 
 ## Usage examples
 
-1. Create youtrack bugs
-
-    M-x yt-bug
+'youtrack-status is bound to 'C-c y' by default
