@@ -221,6 +221,11 @@ the issues is a dedicated buffer"
 
 Aliased to issues list till something better comes along"
   (interactive)
+
+  ;; make sure user variables are configured
+  (if (or (s-blank? yt-user) (s-blank? yt-password) (s-blank? yt-baseurl))
+      (error "Configure youtrack to get started"))
+
   ;; fetch issues if the local DB is not present
   (unless (file-readable-p yt-issue-db)
     (yt-fetch-issues))
