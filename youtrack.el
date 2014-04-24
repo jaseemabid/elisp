@@ -1,5 +1,9 @@
 ;;; youtrack.el --- Youtrack mode for emacs
 
+
+;;; Commentary:
+;; Youtrack mode to work with Youtrack bug tracker from within Emacs
+
 (require 'url)
 (require 'json)
 (require 's)
@@ -7,6 +11,8 @@
 
 ;;; Settings
 ;;;; Custom Groups
+
+;;; Code:
 
 (defgroup youtrack nil
   "Controlling YouTrack from Emacs."
@@ -152,11 +158,12 @@ Current formatting include:
     (url-retrieve-synchronously url)))
 
 (defun yt-fetch-issues ()
+  "Downloads issues list from youtrack and save to `yt-issue-db`."
   (let ((issues (http-get "https://bug.idvc.es/rest/issue/byproject/c" )))
     (switch-to-buffer issues)
     ;; Clear header info, why is it even there?
     (delete-region (point-min) url-http-end-of-headers )
-    (write-file  yt-issue-db)))
+    (write-file yt-issue-db)))
 
 (defun dump-url-buffer (status)
   "The buffer contain the raw HTTP response sent by the server.
@@ -193,7 +200,6 @@ Optional argument DESCRIPTION Issue description."
 
 (defun yt-setup-buffer (action)
   "Setup buffer to show contents of ACTION."
-
   (let ((buffer-switch-function yt-buffer-switch-function))
     (funcall buffer-switch-function (get-buffer-create yt-buffer))
     (font-lock-mode t))
@@ -204,16 +210,15 @@ Optional argument DESCRIPTION Issue description."
 (defun yt-issues-list (&optional project)
   "List youtrack issues for PROJECT.
 
-The issues are read from a issues.json and parsed to pretty print
+The issues are read from `yt-issue-db` and parsed to pretty print
 the issues is a dedicated buffer"
   (let ((json-object-type 'hash-table))
     ;; [todo] - Handle errors raised by JSON decoder
-    (setq issues (json-read-file "./issues.json")))
+    (setq issues (json-read-file yt-issue-db)))
   (apply 'concat (mapcar 'issue-format issues)))
 
-
 (defun yt-status ()
-  "Init screen for youtrack-mode
+  "Init screen for youtrack-mode.
 
 Aliased to issues list till something better comes along"
   (interactive)
