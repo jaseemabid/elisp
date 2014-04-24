@@ -159,14 +159,15 @@ Current formatting include:
 
 (defun yt-fetch-issues ()
   "Downloads issues list from youtrack and save to `yt-issue-db`."
-  (let ((url-path "/rest/issue/byproject/")
-        (url-params "?max=1000"))
-    ;; Login once, this looks like the place for that
-    (yt-login yt-baseurl yt-user yt-password)
-    (let ((issues-url (concat yt-baseurl url-path yt-project url-params)))
-      (switch-to-buffer (http-get issues-url))
+  (let* ((url-path "/rest/issue/byproject/")
+         (url-params "?max=1000")
+         (url-issue-list (concat yt-baseurl url-path yt-project url-params)))
+    (progn
+      ;; Login once, this looks like the place for that
+      (yt-login yt-user yt-password yt-baseurl)
+      (switch-to-buffer (http-get url-issue-list))
       ;; Clear header info, why is it even there?
-      (delete-region (point-min) url-http-end-of-headers )
+      (delete-region (point-min) url-http-end-of-headers)
       (write-file yt-issue-db))))
 
 (defun dump-url-buffer (status)
