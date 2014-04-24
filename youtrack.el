@@ -159,11 +159,13 @@ Current formatting include:
 
 (defun yt-fetch-issues ()
   "Downloads issues list from youtrack and save to `yt-issue-db`."
-  (let ((issues (http-get "https://bug.idvc.es/rest/issue/byproject/c" )))
-    (switch-to-buffer issues)
-    ;; Clear header info, why is it even there?
-    (delete-region (point-min) url-http-end-of-headers )
-    (write-file yt-issue-db)))
+  (let ((url-path "/rest/issue/byproject/")
+        (url-params "?max=1000"))
+    (let ((issues-url (concat yt-baseurl url-path yt-project url-params)))
+      (switch-to-buffer (http-get issues-url))
+      ;; Clear header info, why is it even there?
+      (delete-region (point-min) url-http-end-of-headers )
+      (write-file yt-issue-db))))
 
 (defun dump-url-buffer (status)
   "The buffer contain the raw HTTP response sent by the server.
