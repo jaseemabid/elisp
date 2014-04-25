@@ -125,12 +125,15 @@ The function is given one argument, the status buffer."
   (let ((assignee "")
         (i 0)
         (field (gethash "field" issue)))
-    (while (< i (length field))
-      (let ((prop (elt field i)))
-        (if (string= "Assignee" (gethash "name" prop))
-            (setq assignee (gethash "value" prop))))
-      (cl-incf i))
-    (gethash "value" (elt assignee 0))))
+    (progn
+      (while (< i (length field))
+        (let ((prop (elt field i)))
+          (if (string= "Assignee" (gethash "name" prop))
+              (setq assignee (gethash "value" prop))))
+        (cl-incf i))
+      (if (= (length assignee) 0)
+          ""
+        (gethash "value" (elt assignee 0))))))
 
 (defun issue-format (issue)
   "Format given ISSUE for list display.
