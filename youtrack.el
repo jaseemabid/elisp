@@ -247,7 +247,8 @@ Optional argument DESCRIPTION Issue description."
     (font-lock-mode t))
 
   (erase-buffer)
-  (insert (funcall action)))
+  (insert (funcall action))
+  (beginning-of-buffer))
 
 (defun yt-issues-list (&optional project)
   "List youtrack issues for PROJECT.
