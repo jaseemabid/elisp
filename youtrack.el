@@ -157,6 +157,16 @@ Current formatting include:
      (propertize id 'font-lock-face 'yt-id)
      summary "\n")))
 
+;; Helper methods to work on collection of issues
+(defun yt-issue-count-for (issues &optional user)
+  "Returns number of ISSUES assigned to USER.
+Argument PROJECT Defaults to 'yt-user'."
+  (let ((user (or user yt-user)))
+    (loop
+     for issue across issues
+     count (string= (get-assignee-id issue) user)
+     )))
+
 (defun http-post (url args)
   "Send POST request to URL with arguments ARGS."
   (let ((url-request-method "POST")
