@@ -108,7 +108,7 @@ The function is given one argument, the status buffer."
       (cl-incf i))
     summary))
 
-(defun get-assignee (issue)
+(defun get-assignee-name (issue)
   "Return assignee or empty string given an ISSUE."
   (let ((assignee "")
         (i 0)
@@ -119,6 +119,18 @@ The function is given one argument, the status buffer."
             (setq assignee (gethash "value" prop))))
       (cl-incf i))
     (gethash "fullName" (elt assignee 0))))
+
+(defun get-assignee-id (issue)
+  "Return assignee or empty string given an ISSUE."
+  (let ((assignee "")
+        (i 0)
+        (field (gethash "field" issue)))
+    (while (< i (length field))
+      (let ((prop (elt field i)))
+        (if (string= "Assignee" (gethash "name" prop))
+            (setq assignee (gethash "value" prop))))
+      (cl-incf i))
+    (gethash "value" (elt assignee 0))))
 
 (defun issue-format (issue)
   "Format given ISSUE for list display.
