@@ -281,6 +281,7 @@ c : Create a bug
         (total (length issues)))
     (apply 'format (list template project total mine yt-baseurl))))
 
+;;;; Interactive methods
 (defun yt-status ()
   "Init screen for youtrack-mode."
   (interactive)
@@ -295,6 +296,11 @@ c : Create a bug
 
   (yt-setup-buffer '(lambda ()
                       (yt-issues-overview issues))))
+
+(defun yt-issues ()
+  "Lists all issues."
+  (interactive)
+  (yt-setup-buffer 'yt-issues-list))
 
 ;; Key bindings and aliases
 (define-key global-map (kbd "C-c y") 'yt-status)
