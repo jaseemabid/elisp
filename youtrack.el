@@ -259,10 +259,29 @@ the issues is a dedicated buffer"
     (setq issues (json-read-file yt-issue-db)))
   (apply 'concat (mapcar 'issue-format issues)))
 
-(defun yt-status ()
-  "Init screen for youtrack-mode.
+(defun yt-issues-overview (issues &optional project)
+  "List youtrack status for PROJECT.
 
-Aliased to issues list till something better comes along"
+A general overview of the project is shown."
+  (let ((template "Youtrack
+
+Project        : %s
+Total Issues   : %d
+Assigned to me : %d
+Remote         : %s
+
+Shortcuts:
+
+l : Show log
+c : Create a bug
+")
+        (project (or project yt-project))
+        (mine (yt-issue-count-for issues))
+        (total (length issues)))
+    (apply 'format (list template project total mine yt-baseurl))))
+
+(defun yt-status ()
+  "Init screen for youtrack-mode."
   (interactive)
 
   ;; make sure user variables are configured
@@ -273,7 +292,8 @@ Aliased to issues list till something better comes along"
   (unless (file-readable-p yt-issue-db)
     (yt-fetch-issues))
 
-  (yt-setup-buffer 'yt-issues-list))
+  (yt-setup-buffer '(lambda ()
+                      (yt-issues-overview issues))))
 
 ;; Key bindings and aliases
 (define-key global-map (kbd "C-c y") 'yt-status)
