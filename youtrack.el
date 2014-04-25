@@ -303,6 +303,7 @@ c : Create a bug
   (yt-setup-buffer 'yt-issues-list))
 
 ;; Key bindings and aliases
+;; [todo] - Alias (local-set-key (kbd "l") 'yt-issues) correctly
 (define-key global-map (kbd "C-c y") 'yt-status)
 
 (provide 'youtrack)
