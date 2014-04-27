@@ -15,14 +15,17 @@
 (require 's)
 (require 'cl-lib)
 
-;;; Youtrack Major Mode setup
+;;; Code:
+
+;;;; Youtrack Major Mode setup
+
 (defvar yt-mode-hook nil)
 
 (defvar yt-mode-map
   (let ((map (make-keymap)))
     (define-key map "l" 'yt-issues)
     map)
-  "Keymap for youtrack major mode.")
+  "Key map for youtrack major mode.")
 
 (define-derived-mode yt-mode special-mode "Youtrack"
   "Major mode for interacting with youtrack bug tracker from Emacs.
@@ -33,8 +36,6 @@
 
 ;;; Settings
 ;;;; Custom Groups
-
-;;; Code:
 
 (defgroup youtrack nil
   "Controlling YouTrack from Emacs."
@@ -71,7 +72,8 @@ Ex: https://bug.idvc.es"
   :group 'youtrack
   :type 'file)
 
-;; Appearance settings
+;;;; Appearance settings
+
 (defface yt-id
   '((((class color) (background light))
      :foreground "firebrick")
@@ -79,6 +81,8 @@ Ex: https://bug.idvc.es"
      :foreground "tomato"))
   "Face for the ID element of the issues list output."
   :group 'youtrack)
+
+;;;; Behavior settings
 
 (defcustom yt-buffer-switch-function 'pop-to-buffer
   "Function for `yt-issues-list' to use for switching to the list buffer.
@@ -89,7 +93,8 @@ The function is given one argument, the status buffer."
                 (function-item pop-to-buffer)
                 (function :tag "Other")))
 
-;; Helper methods to work on issues
+;;;; Helper methods to work on single issue
+
 (defun get-id (issue)
   "Return ID or nil given an ISSUE."
   (let ((id nil))
@@ -173,7 +178,8 @@ Current formatting include:
      (propertize id 'font-lock-face 'yt-id)
      summary "\n")))
 
-;; Helper methods to work on collection of issues
+;;;; Helper methods to work on collection of issues
+
 (defun yt-issue-count-for (issues &optional user)
   "Returns number of ISSUES assigned to USER.
 Argument PROJECT Defaults to 'yt-user'."
@@ -182,6 +188,8 @@ Argument PROJECT Defaults to 'yt-user'."
      for issue across issues
      count (string= (get-assignee-id issue) user)
      )))
+
+;;;; Network helper functions
 
 (defun http-post (url args)
   "Send POST request to URL with arguments ARGS."
@@ -216,6 +224,8 @@ Argument PROJECT Defaults to 'yt-user'."
          '(("Accept" . "application/json"))))
     (url-retrieve-synchronously url)))
 
+;;;; Remote interaction functions
+
 (defun yt-fetch-issues ()
   "Downloads issues list from youtrack and save to `yt-issue-db`."
   (let* ((url-path "/rest/issue/byproject/")
@@ -243,18 +253,19 @@ Argument PROJECT Defaults to 'yt-user'."
     (http-post (format "%s%s" baseurl url-path)
                (list `("login" . ,user) `("password" . ,password)))))
 
-(defun yt-bug (project summary description)
-  "Create a youtrack issue.
-Argument PROJECT Shortname of the project at YouTrack.
-Argument SUMMARY Issue summary.
-Optional argument DESCRIPTION Issue description."
-  (interactive "sProj. Shortname: \nsSummary: \nsDesc: ")
+;;;; Issue DB helpers functions
 
-  (let ((url-path "/rest/issue"))
-    (http-put (concat yt-baseurl url-path)
-		      (list `("project" . ,yt-project)
-                    `("summary" . ,summary)
-                    `("description" . ,description)))))
+(defun yt-issues-list (&optional project)
+  "List youtrack issues for PROJECT.
+
+The issues are read from `yt-issue-db` and parsed to pretty print
+the issues is a dedicated buffer"
+  (let ((json-object-type 'hash-table))
+    ;; [todo] - Handle errors raised by JSON decoder
+    (setq issues (json-read-file yt-issue-db)))
+  (apply 'concat (mapcar 'issue-format issues)))
+
+;;;; Buffer/display helper functions
 
 (defun yt-setup-buffer (action)
   "Setup buffer to show contents of ACTION and turn on `yt-mode'."
@@ -268,15 +279,7 @@ Optional argument DESCRIPTION Issue description."
     (beginning-of-buffer))
   (yt-mode))
 
-(defun yt-issues-list (&optional project)
-  "List youtrack issues for PROJECT.
-
-The issues are read from `yt-issue-db` and parsed to pretty print
-the issues is a dedicated buffer"
-  (let ((json-object-type 'hash-table))
-    ;; [todo] - Handle errors raised by JSON decoder
-    (setq issues (json-read-file yt-issue-db)))
-  (apply 'concat (mapcar 'issue-format issues)))
+;;;; Wrappers
 
 (defun yt-issues-overview (issues &optional project)
   "List youtrack status for PROJECT.
@@ -299,7 +302,8 @@ c : Create a bug
         (total (length issues)))
     (apply 'format (list template project total mine yt-baseurl))))
 
-;;;; Interactive methods
+;;;; Interactive commands
+
 (defun yt-status ()
   "Init screen for youtrack-mode."
   (interactive)
@@ -320,8 +324,20 @@ c : Create a bug
   (interactive)
   (yt-setup-buffer 'yt-issues-list))
 
-;; Key bindings and aliases
-;; [todo] - Alias (local-set-key (kbd "l") 'yt-issues) correctly
+(defun yt-bug (project summary description)
+  "Create a youtrack issue.
+Argument PROJECT Shortname of the project at YouTrack.
+Argument SUMMARY Issue summary.
+Optional argument DESCRIPTION Issue description."
+  (interactive "sProj. Shortname: \nsSummary: \nsDesc: ")
+
+  (let ((url-path "/rest/issue"))
+    (http-put (concat yt-baseurl url-path)
+		      (list `("project" . ,yt-project)
+                    `("summary" . ,summary)
+                    `("description" . ,description)))))
+
+;;;; Key bindings and aliases
 (define-key global-map (kbd "C-c y") 'yt-status)
 
 (provide 'youtrack)
