@@ -276,7 +276,7 @@ the issues is a dedicated buffer"
   (let ((inhibit-read-only t))
     (erase-buffer)
     (insert (funcall action))
-    (beginning-of-buffer))
+    (goto-char (point-min)))
   (yt-mode))
 
 ;;;; Wrappers
