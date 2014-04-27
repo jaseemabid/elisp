@@ -257,14 +257,16 @@ Optional argument DESCRIPTION Issue description."
                     `("description" . ,description)))))
 
 (defun yt-setup-buffer (action)
-  "Setup buffer to show contents of ACTION."
+  "Setup buffer to show contents of ACTION and turn on `yt-mode'."
   (let ((buffer-switch-function yt-buffer-switch-function))
     (funcall buffer-switch-function (get-buffer-create yt-buffer))
     (font-lock-mode t))
 
-  (erase-buffer)
-  (insert (funcall action))
-  (beginning-of-buffer))
+  (let ((inhibit-read-only t))
+    (erase-buffer)
+    (insert (funcall action))
+    (beginning-of-buffer))
+  (yt-mode))
 
 (defun yt-issues-list (&optional project)
   "List youtrack issues for PROJECT.
