@@ -254,16 +254,19 @@ Argument PROJECT Defaults to 'yt-user'."
                (list `("login" . ,user) `("password" . ,password)))))
 
 ;;;; Issue DB helpers functions
+(setq yt-issue-db-cache nil)
+(defun yt-get-issue-db (&optional project)
+  "Return issue db for PROJECT.
 
-(defun yt-issues-list (&optional project)
-  "List youtrack issues for PROJECT.
-
-The issues are read from `yt-issue-db` and parsed to pretty print
-the issues is a dedicated buffer"
-  (let ((json-object-type 'hash-table))
-    ;; [todo] - Handle errors raised by JSON decoder
-    (setq issues (json-read-file yt-issue-db)))
-  (apply 'concat (mapcar 'issue-format issues)))
+Fetch if not found locally"
+  ;; [todo] - Fetch issues if local cache is not found
+  ;; [todo] - Memoize cleanly
+  (or yt-issue-db-cache
+      (let ((json-object-type 'hash-table))
+        (progn
+          ;; [todo] - Handle errors raised by JSON decoder
+          (setq yt-issue-db-cache (json-read-file yt-issue-db))
+          yt-issue-db-cache))))
 
 ;;;; Buffer/display helper functions
 
@@ -278,6 +281,13 @@ the issues is a dedicated buffer"
     (insert (funcall action))
     (goto-char (point-min)))
   (yt-mode))
+
+(defun yt-issues-list (&optional project)
+  "List youtrack issues for PROJECT.
+
+The issues are read from `yt-issue-db` and parsed to pretty print
+the issues is a dedicated buffer"
+  (apply 'concat (mapcar 'issue-format (yt-get-issue-db))))
 
 ;;;; Wrappers
 
@@ -317,7 +327,7 @@ c : Create a bug
     (yt-fetch-issues))
 
   (yt-setup-buffer '(lambda ()
-                      (yt-issues-overview issues))))
+                      (yt-issues-overview (yt-get-issue-db)))))
 
 (defun yt-issues ()
   "Lists all issues."
