@@ -48,7 +48,7 @@ features for free.
 [A note about commit messages][commit-message] and
 [Stop writing rambling commit messages][ramble].
 
-## Links
+<!-- Links -->
 
 [1]: http://www.gnu.org/software/emacs/manual/html_node/elisp/Basic-Major-Modes.html "Basic Major Modes"
 [2]: http://www.gnu.org/software/emacs/manual/html_node/elisp/Derived-Modes.html "Derived Modes"
