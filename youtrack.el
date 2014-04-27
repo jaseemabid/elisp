@@ -15,6 +15,22 @@
 (require 's)
 (require 'cl-lib)
 
+;;; Youtrack Major Mode setup
+(defvar yt-mode-hook nil)
+
+(defvar yt-mode-map
+  (let ((map (make-keymap)))
+    (define-key map "l" 'yt-issues)
+    map)
+  "Keymap for youtrack major mode.")
+
+(define-derived-mode yt-mode special-mode "Youtrack"
+  "Major mode for interacting with youtrack bug tracker from Emacs.
+
+\\{yt-mode-map}"
+  (buffer-disable-undo)
+  (use-local-map yt-mode-map))
+
 ;;; Settings
 ;;;; Custom Groups
 
