@@ -172,10 +172,11 @@ Current formatting include:
           (setq summary-maxlen (- multi 1))))
 
     (setq summary (substring summary 0 (min summary-maxlen (length summary)))
-          id (s-pad-right 8 " " id))
+          id (s-pad-right 5 " " id))
 
     (concat
      (propertize id 'font-lock-face 'yt-id)
+     " * "
      summary "\n")))
 
 ;;;; Helper methods to work on collection of issues
