@@ -23,7 +23,11 @@
 
 (defvar yt-mode-map
   (let ((map (make-keymap)))
-    (define-key map "l" 'yt-issues)
+    (suppress-keymap map t)
+    (define-key map (kbd "l") 'yt-issues)
+    (define-key map (kbd "c") 'yt-bug)
+    (define-key map (kbd "f") 'yt-fetch-issues)
+    (define-key map (kbd "RET") 'yt-visit-item)
     map)
   "Key map for youtrack major mode.")
 
@@ -229,6 +233,7 @@ Argument PROJECT Defaults to 'yt-user'."
 
 (defun yt-fetch-issues ()
   "Downloads issues list from youtrack and save to `yt-issue-db`."
+  (interactive)
   (let* ((url-path "/rest/issue/byproject/")
          (url-params "?max=1000")
          (url-issue-list (concat yt-baseurl url-path yt-project url-params)))
@@ -307,7 +312,7 @@ Shortcuts:
 
 l : Show log
 c : Create a bug
-")
+f : Fetch issues")
         (project (or project yt-project))
         (mine (yt-issue-count-for issues))
         (total (length issues)))
