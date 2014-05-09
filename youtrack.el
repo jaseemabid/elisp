@@ -278,10 +278,11 @@ Fetch if not found locally"
 
 ;;;; Buffer/display helper functions
 
-(defun yt-setup-buffer (action)
+(defun yt-setup-buffer (action &optional buffer)
   "Setup buffer to show contents of ACTION and turn on `yt-mode'."
-  (let ((buffer-switch-function yt-buffer-switch-function))
-    (funcall buffer-switch-function (get-buffer-create yt-buffer))
+  (let ((buffer-switch-function yt-buffer-switch-function)
+        (buffer (or buffer yt-buffer)))
+    (funcall buffer-switch-function (get-buffer-create buffer))
     (font-lock-mode t))
 
   (let ((inhibit-read-only t))
