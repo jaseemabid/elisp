@@ -329,11 +329,24 @@ f : Fetch issues")
         (total (length issues)))
     (apply 'format (list template project total mine yt-baseurl))))
 
+(defun yt-issue-overview (issue)
+  "Pretty print a ISSUE."
+  (let ((template " * Issue Summary *
+Summary     : %s
+Description : %s")
+        (summary (get-summary issue))
+        (desc (get-desc issue)))
+    (apply 'format (list template summary desc))))
+
 (defun yt-visit-item (&optional other-window)
   (interactive "P")
-  (let* ((n (line-number-at-pos))
-         (issue (elt(yt-get-issue-db) (- n 1))))
-    (message (get-summary issue))))
+  ;; Handle issues for now
+  (yt-setup-buffer (yt-issue-overview (yt-issue-at-point)) yt-issue-buffer))
+
+(defun yt-issue-at-point ()
+  (interactive "P")
+  (let ((n (line-number-at-pos)))
+    (elt (yt-get-issue-db) (- n 1))))
 
 ;;;; Interactive commands
 
