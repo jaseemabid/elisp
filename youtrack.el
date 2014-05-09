@@ -27,7 +27,7 @@
     (define-key map (kbd "l") 'yt-issues)
     (define-key map (kbd "c") 'yt-bug)
     (define-key map (kbd "f") 'yt-fetch-issues)
-    (define-key map (kbd "RET") 'yt-visit-item)
+    (define-key map (kbd "<return>") 'yt-visit-item)
     map)
   "Key map for youtrack major mode.")
 
@@ -319,6 +319,10 @@ f : Fetch issues")
         (mine (yt-issue-count-for issues))
         (total (length issues)))
     (apply 'format (list template project total mine yt-baseurl))))
+
+(defun yt-visit-item (&optional other-window)
+  (interactive "P")
+  (message "handled RET"))
 
 ;;;; Interactive commands
 
