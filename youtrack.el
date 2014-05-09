@@ -322,7 +322,9 @@ f : Fetch issues")
 
 (defun yt-visit-item (&optional other-window)
   (interactive "P")
-  (message "handled RET"))
+  (let* ((n (line-number-at-pos))
+         (issue (elt(yt-get-issue-db) (- n 1))))
+    (message (get-summary issue))))
 
 ;;;; Interactive commands
 
