@@ -71,6 +71,11 @@ Ex: https://bug.idvc.es"
   :group 'youtrack
   :type 'string)
 
+(defcustom yt-issue-buffer "*youtrack-issue*"
+  "Name of the buffer to show a single issue."
+  :group 'youtrack
+  :type 'string)
+
 (defcustom yt-issue-db "~/.emacs.d/youtrack/issues.json"
   "Default project JSON DB path."
   :group 'youtrack
