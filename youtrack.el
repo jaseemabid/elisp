@@ -89,7 +89,15 @@ Ex: https://bug.idvc.es"
      :foreground "firebrick")
     (((class color) (background dark))
      :foreground "tomato"))
-  "Face for the ID element of the issues list output."
+  "Face for the ID elements."
+  :group 'youtrack)
+
+(defface yt-header
+  '((((class color) (background light))
+     :foreground "orange")
+    (((class color) (background dark))
+     :foreground "orange"))
+  "Face for the title elements."
   :group 'youtrack)
 
 ;;;; Behavior settings
@@ -330,12 +338,29 @@ f : Fetch issues")
 
 (defun yt-issue-overview (issue)
   "Pretty print a ISSUE."
-  (let ((template " * Issue Summary *
-Summary     : %s
-Description : %s")
-        (summary (get-summary issue))
+  (let ((template "%s
+
+Assignee       : %s
+Severity       : %s
+Type           : %s
+Target Version : %s
+State          : %s
+Due Date       : %s
+
+%s
+
+%s")
+        (id (propertize (get-id issue) 'font-lock-face 'yt-id))
+        (assignee "*assignee*")
+        (severity "*severity*")
+        (type "*type*")
+        (version "*version*")
+        (state "*state*")
+        (due "*due date*")
+        (summary (propertize (get-summary issue) 'font-lock-face 'yt-header))
         (desc (get-desc issue)))
-    (apply 'format (list template summary desc))))
+    (apply 'format (list template id assignee severity type
+                         version state due summary desc))))
 
 (defun yt-visit-item ()
   (interactive)
