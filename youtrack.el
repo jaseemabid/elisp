@@ -339,7 +339,8 @@ Description : %s")
 (defun yt-visit-item (&optional other-window)
   (interactive "P")
   ;; Handle issues for now
-  (yt-setup-buffer (yt-issue-overview (yt-issue-at-point)) yt-issue-buffer))
+  (yt-setup-buffer '(lambda ()
+                      (yt-issue-overview (yt-issue-at-point))) yt-issue-buffer))
 
 (defun yt-issue-at-point ()
   (interactive "P")
