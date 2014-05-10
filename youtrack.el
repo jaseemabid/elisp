@@ -292,10 +292,7 @@ Fetch if not found locally"
 
   (let ((inhibit-read-only t))
     (erase-buffer)
-    ;; Insert result if action is callable, else insert it as it is.
-    (insert (if (fboundp 'action)
-                (funcall action)
-              action))
+    (insert (funcall action))
     (goto-char (point-min)))
   (yt-mode))
 
