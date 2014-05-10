@@ -308,11 +308,12 @@ the issues is a dedicated buffer"
 
 ;;;; Wrappers
 
-(defun yt-issues-overview (issues &optional project)
+(defun yt-issues-overview (&optional issues &optional project)
   "List youtrack status for PROJECT.
 
 A general overview of the project is shown."
-  (let ((template "Youtrack
+  (let* ((issues (or issues (yt-get-issue-db)))
+        (template "Youtrack
 
 Project        : %s
 Total Issues   : %d
@@ -362,8 +363,7 @@ Description : %s")
   (unless (file-readable-p yt-issue-db)
     (yt-fetch-issues))
 
-  (yt-setup-buffer '(lambda ()
-                      (yt-issues-overview (yt-get-issue-db)))))
+  (yt-setup-buffer 'yt-issues-overview))
 
 (defun yt-issues ()
   "Lists all issues."
