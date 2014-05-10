@@ -27,6 +27,7 @@
     (define-key map (kbd "l") 'yt-issues)
     (define-key map (kbd "c") 'yt-bug)
     (define-key map (kbd "f") 'yt-fetch-issues)
+    (define-key map (kbd "SPC") 'yt-preview-item)
     (define-key map (kbd "<return>") 'yt-visit-item)
     map)
   "Key map for youtrack major mode.")
@@ -336,11 +337,16 @@ Description : %s")
         (desc (get-desc issue)))
     (apply 'format (list template summary desc))))
 
-(defun yt-visit-item (&optional other-window)
-  (interactive "P")
+(defun yt-visit-item ()
+  (interactive)
   ;; Handle issues for now
   (yt-setup-buffer '(lambda ()
                       (yt-issue-overview (yt-issue-at-point))) yt-issue-buffer))
+
+(defun yt-preview-item ()
+  (interactive)
+  (yt-visit-item)
+  (pop-to-buffer yt-buffer))
 
 (defun yt-issue-at-point ()
   (interactive "P")
