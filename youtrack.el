@@ -286,15 +286,15 @@ Fetch if not found locally"
 (defun yt-setup-buffer (action &optional buffer)
   "Setup buffer to show contents of ACTION and turn on `yt-mode'."
   (let ((buffer-switch-function yt-buffer-switch-function)
-        (buffer (or buffer yt-buffer)))
+        (buffer (or buffer yt-buffer))
+        (contents (funcall action))
+        (inhibit-read-only t))
     (funcall buffer-switch-function (get-buffer-create buffer))
-    (font-lock-mode t))
-
-  (let ((inhibit-read-only t))
     (erase-buffer)
-    (insert (funcall action))
-    (goto-char (point-min)))
-  (yt-mode))
+    (font-lock-mode t)
+    (insert contents)
+    (goto-char (point-min))
+    (yt-mode)))
 
 (defun yt-issues-list (&optional project)
   "List youtrack issues for PROJECT.
