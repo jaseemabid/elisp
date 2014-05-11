@@ -181,7 +181,7 @@ The function is given one argument, the status buffer."
 
 Current formatting include:
 - Pads the issue to 8 chars
-- Clips the issue summary at 'summary-maxlen' chars"
+- Clips the issue summary at `summary-maxlen' chars"
   (let ((id (get-id issue))
         (summary-maxlen 74)
         (summary (get-summary issue)))
@@ -203,7 +203,8 @@ Current formatting include:
 
 (defun yt-issue-count-for (issues &optional user)
   "Returns number of ISSUES assigned to USER.
-Argument PROJECT Defaults to 'yt-user'."
+
+Argument PROJECT Defaults to `yt-user'."
   (let ((user (or user yt-user)))
     (loop
      for issue across issues
@@ -310,7 +311,7 @@ Fetch if not found locally"
 (defun yt-issues-list (&optional project)
   "List youtrack issues for PROJECT.
 
-The issues are read from `yt-issue-db` and parsed to pretty print
+The issues are read from `yt-issue-db' and parsed to pretty print
 the issues is a dedicated buffer"
   (apply 'concat (mapcar 'issue-format (yt-get-issue-db))))
 
