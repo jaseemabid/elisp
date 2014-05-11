@@ -28,6 +28,8 @@
     (define-key map (kbd "c") 'yt-bug)
     (define-key map (kbd "f") 'yt-fetch-issues)
     (define-key map (kbd "SPC") 'yt-preview-item)
+    (define-key map (kbd "p") 'yt-preview-previous)
+    (define-key map (kbd "n") 'yt-preview-next)
     (define-key map (kbd "<return>") 'yt-visit-item)
     map)
   "Key map for youtrack major mode.")
@@ -372,6 +374,16 @@ Due Date       : %s
   (interactive)
   (yt-visit-item)
   (pop-to-buffer yt-buffer))
+
+(defun yt-preview-next ()
+  (interactive)
+  (next-line)
+  (yt-preview-item))
+
+(defun yt-preview-previous ()
+  (interactive)
+  (previous-line)
+  (yt-preview-item))
 
 (defun yt-issue-at-point ()
   (interactive "P")
