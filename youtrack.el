@@ -328,6 +328,7 @@ Project        : %s
 Total Issues   : %d
 Assigned to me : %d
 Remote         : %s
+Last Updated   : %s
 
 Shortcuts:
 
@@ -336,8 +337,14 @@ c : Create a bug
 f : Fetch issues")
         (project (or project yt-project))
         (mine (yt-issue-count-for issues))
-        (total (length issues)))
-    (apply 'format (list template project total mine yt-baseurl))))
+        (total (length issues))
+        (mtime (nth 5 (file-attributes yt-issue-db))))
+    (apply 'format (list template
+                         project
+                         total
+                         mine
+                         yt-baseurl
+                         (format-time-string "%Y-%m-%d %T" mtime)))))
 
 (defun yt-issue-overview (issue)
   "Pretty print a ISSUE."
