@@ -1,5 +1,6 @@
 #+TITLE: Youtrack mode development road map
 #+AUTHOR: Jaseem Abid <jaseemabid@gmail.com>
+#+STARTUP: indent
 
 * Features to have [25%]
 ** TODO Dedicated buffer to create issues
