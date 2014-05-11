@@ -1,0 +1,23 @@
+#+TITLE: Youtrack mode development road map
+#+AUTHOR: Jaseem Abid <jaseemabid@gmail.com>
+
+* Features to have [25%]
+** TODO Dedicated buffer to create issues
+    Create issue should use a buffer like git commit mode instead of reading
+    from mini buffer
+
+** TODO Persist issue details with a temp file
+   In case creating an issue failed, the contents should be saved to disk for
+   retry.
+
+** TODO Seamless switching b/w multiple projects
+
+** DONE Show last updated time of issues
+
+* Bugs to fix [0%]
+** TODO Issues are always created against yt-project
+** TODO Issue DB is shared b/w projects
+   Name of the Issue DB could be prefixed with the project name
+
+* Tasks [0%]
+** TODO Prefix all functions, macros and variables with `yt-'
