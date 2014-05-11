@@ -353,7 +353,7 @@ Due Date       : %s
 
 %s")
         (id (propertize (get-id issue) 'font-lock-face 'yt-id))
-        (assignee "*assignee*")
+        (assignee (get-assignee-name issue))
         (severity "*severity*")
         (type "*type*")
         (version "*version*")
