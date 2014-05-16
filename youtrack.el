@@ -284,6 +284,7 @@ Argument PROJECT Defaults to `yt-user'."
       ;; Login once, this looks like the place for that
       (yt-login yt-user yt-password yt-baseurl)
       ;; Will be nice if I don't have to switch to the buffer and close it
+      ;; [todo] - Force open in fundamental mode
       (switch-to-buffer (http-get url-issue-list))
       ;; Clear header info, why is it even there?
       (delete-region (point-min) url-http-end-of-headers)
